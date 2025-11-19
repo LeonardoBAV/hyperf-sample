@@ -80,7 +80,7 @@ class ProductController
     public function delete(ResponseInterface $response, $id)
     {
         $this->productService->delete((int) $id);
-        return $response->raw('No Content')->withStatus(204);
+        return $response->raw('')->withStatus(204);
     }
 
 
