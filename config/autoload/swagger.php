@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @contact  group@hyperf.io
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+use function Hyperf\Support\env;
 return [
     'enable' => true,
     'port' => 9500,
@@ -25,7 +26,7 @@ return [
         'http' => [
             'servers' => [
                 [
-                    'url' => 'http://127.0.0.1:9501',
+                    'url' => env('SWAGGER_URL', 'http://127.0.0.1:9501'),
                     'description' => 'Public API',
 
                 ],
