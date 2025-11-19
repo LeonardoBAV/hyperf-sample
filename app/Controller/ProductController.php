@@ -15,6 +15,7 @@ use Hyperf\HttpServer\Annotation\PostMapping;
 use Hyperf\HttpServer\Annotation\PutMapping;
 use Hyperf\HttpServer\Annotation\DeleteMapping;
 use App\Resource\ProductResource;
+use App\Service\ProductService;
 use Hyperf\Swagger\Annotation\HyperfServer;
 use Hyperf\Swagger\Annotation\Get;
 use Hyperf\Swagger\Annotation\JsonContent;
@@ -24,11 +25,15 @@ use Hyperf\Swagger\Annotation\Response as SwaggerResponse;
 use Hyperf\Swagger\Annotation\Put;
 use Hyperf\Swagger\Annotation\Post;
 use Hyperf\Swagger\Annotation\Delete;
+use Hyperf\Di\Annotation\Inject;
 
 #[Controller]
 #[HyperfServer(name: "http")]
 class ProductController
 {
+
+    #[Inject]
+    protected ProductService $productService;
 
     #[Get(path: "/products", summary: "List all products", tags: ["Products"])]
     #[SwaggerResponse(response: 200, description: "Success", content: new JsonContent(ref: '#/components/schemas/ProductCollection'))]
@@ -54,8 +59,7 @@ class ProductController
     #[PutMapping(path: "{id}")]
     public function update(ProductRequest $request, $id)
     {
-        $product = Product::find($id);
-        $product->update($request->all());
+        $product = $this->productService->update((int) $id, $request->all());
         return (new ProductResource($product))->toResponse();
     }
 
@@ -65,7 +69,7 @@ class ProductController
     #[PostMapping(path: "")]
     public function create(ProductRequest $request)
     {
-        $product = Product::create($request->all());
+        $product = $this->productService->create($request->all());
         return (new ProductResource($product))->toResponse();
     }
 
@@ -75,7 +79,7 @@ class ProductController
     #[DeleteMapping(path: "{id}")]
     public function delete(ResponseInterface $response, $id)
     {
-        Product::find($id)->delete();
+        $this->productService->delete((int) $id);
         return $response->raw('No Content')->withStatus(204);
     }
 

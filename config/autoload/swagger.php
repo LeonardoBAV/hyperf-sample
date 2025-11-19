@@ -26,7 +26,7 @@ return [
         'http' => [
             'servers' => [
                 [
-                    'url' => env('SWAGGER_URL', 'http://127.0.0.1:9501'),
+                    'url' => env('SWAGGER_URL', 'http://localhost'),
                     'description' => 'Public API',
 
                 ],
